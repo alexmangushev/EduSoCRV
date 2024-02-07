@@ -1,5 +1,5 @@
 // APB3
-interface apb_if;
+interface apb_if
 #(
     DATA_WIDTH  = 32,
     ADDR_WIDTH  = 32
@@ -7,7 +7,7 @@ interface apb_if;
 (
     input PCLK,
     input PRESETn
-)
+);
 
     logic   [ADDR_WIDTH - 1:0]  PADDR;
     logic                       PSEL;
