@@ -1,5 +1,5 @@
 // APB3
-interface apb_if;
+interface axi_lite_if
 #(
     DATA_WIDTH  = 32,
     ADDR_WIDTH  = 32
@@ -7,7 +7,7 @@ interface apb_if;
 (
     input ACLK,
     input ARESETn
-)
+);
 
     logic [ADDR_WIDTH - 1:0]            AWADDR;
     logic                               AWVALID;
