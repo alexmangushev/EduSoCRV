@@ -19,7 +19,7 @@ interface axi_lite_if
     logic                               WVALID;
     logic                               WREADY;
 
-    logic                               BRESP;
+    logic [1:0]                         BRESP;
     logic                               BVALID;
     logic                               BREADY;
 
@@ -29,11 +29,13 @@ interface axi_lite_if
     logic                               ARREADY;
 
     logic [DATA_WIDTH - 1:0]            RDATA;
-    logic                               RRESP;
+    logic [1:0]                         RRESP;
     logic                               RVALID;
     logic                               RREADY;
 
 modport master (
+    input   ACLK,
+    input   ARESETn,    
     output  AWADDR,
     output  AWVALID,
     output  AWPROT,
@@ -59,6 +61,8 @@ modport master (
 );
 
 modport slave (
+    input   ACLK,
+    input   ARESETn,    
     input   AWADDR,
     input   AWVALID,
     input   AWPROT,

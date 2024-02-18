@@ -18,6 +18,8 @@ interface apb_if
     logic   [DATA_WIDTH - 1:0]  PRDATA;
 
 modport master (
+    output  PCLK,
+    output  PRESETn,
     output  PADDR,
     output  PSEL,
     output  PENABLE,
@@ -28,6 +30,8 @@ modport master (
 );
 
 modport slave (
+    input   PCLK,
+    input   PRESETn,
     input   PADDR,
     input   PSEL,
     input   PENABLE,
