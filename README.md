@@ -33,6 +33,9 @@
 | 0x9200_0008   | UART_RX       | [R] UART Data Register            |
 | 0x9200_000C   | UART_TX       | [W] UART Data Register            |
 
+Схема блока
+![](./img/UART_scheme.png)
+
 
 
 ## Регистры блока GPIO
@@ -42,3 +45,10 @@
 | 0x9300_0000   | GPIO_DIRECTION    | [RW] Configuration Register   |
 | 0x9300_0004   | GPIO_INPUT        | [R] GPIO Input Status         |
 | 0x9300_0008   | GPIO_OUTPUT       | [RW] GPIO Output Control      |
+
+Схема блока
+![](./img/GPIO_scheme.png)
+
+## ROM controller
+Схема блока
+![](./img/ROM_scheme.png)
