@@ -1,0 +1,96 @@
+# do ../modelsim.tcl 
+# ../../../rtl/interfaces/apb_if.sv
+# ../../../rtl/gpio/gpio.sv
+# ../gpio_tb.sv
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling interface apb_if
+# -- Compiling module gpio
+# -- Compiling module gpio_tb
+# 
+# Top level modules:
+# 	gpio_tb
+# vsim work.gpio_tb 
+# Loading sv_std.std
+# Loading work.gpio_tb
+# Loading work.apb_if
+# Loading work.gpio
+# Break in Module gpio_tb at ../gpio_tb.sv line 63
+# Simulation Breakpoint: Break in Module gpio_tb at ../gpio_tb.sv line 63
+# MACRO ./../modelsim.tcl PAUSED at line 18
+add wave /gpio_tb/apb
+# (vish-4014) No objects found matching '/gpio_tb/apb'.
+add wave /gpio_tb/apb*
+# (vish-4014) No objects found matching '/gpio_tb/apb*'.
+add wave /gpio_tb/gpio/apb
+# (vish-4014) No objects found matching '/gpio_tb/gpio/apb'.
+add wave /gpio_tb/gpio/apb*
+# (vish-4014) No objects found matching '/gpio_tb/gpio/apb*'.
+apb_in
+# invalid command name "apb_in"
+add wave /gpio_tb/gpio/apb_in
+# (vish-4014) No objects found matching '/gpio_tb/gpio/apb_in'.
+add wave /gpio_tb/gpio/apb_in*
+# (vish-4014) No objects found matching '/gpio_tb/gpio/apb_in*'.
+find /gpio_tb
+# bad option "/gpio_tb": should be one of...
+#   find blocks ?arg arg ...?
+#   find classes ?pattern?
+#   find connections ?arg arg ...?
+#   find drivers ?arg arg ...?
+#   find infiles ?arg arg ...?
+#   find insource ?arg arg ...?
+#   find instances ?arg arg ...?
+#   find loads ?arg arg ...?
+#   find nets ?arg arg ...?
+#   find objects ?-class className? ?-isa className? ?pattern?
+#   find signals ?arg arg ...?
+#   find virtuals ?arg arg ...?
+find signals /gpio_tb
+find signals /gpio_tb/
+find signals *
+# /gpio_tb/gpio_out /gpio_tb/clk /gpio_tb/arstn /gpio_tb/gpio_en /gpio_tb/gpio_in
+find signals * -recursive
+# /gpio_tb/dut/clk /gpio_tb/apb/PRDATA /gpio_tb/gpio_out /gpio_tb/apb/PSEL /gpio_tb/apb/PREADY /gpio_tb/arstn /gpio_tb/clk /gpio_tb/dut/apb_wait /gpio_tb/apb/PWDATA /gpio_tb/dut/gpio_en /gpio_tb/apb/PADDR /gpio_tb/dut/apb_registers /gpio_tb/dut/gpio_in /gpio_tb/gpio_en /gpio_tb/#anonblk#0#27#4#/i /gpio_tb/apb/PENABLE /gpio_tb/dut/apb_prdata /gpio_tb/dut/gpio_out /gpio_tb/apb/PRESETn /gpio_tb/dut/arstn /gpio_tb/apb/PCLK /gpio_tb/gpio_in /gpio_tb/apb/PWRITE
+add wave /gpio_tb/apb/*
+do ../modelsim.tcl
+# ** Warning: (vlib-34) Library already exists at "work".
+# 
+# ../../../rtl/interfaces/apb_if.sv
+# ../../../rtl/gpio/gpio.sv
+# ../gpio_tb.sv
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling interface apb_if
+# -- Compiling module gpio
+# -- Compiling module gpio_tb
+# 
+# Top level modules:
+# 	gpio_tb
+# vsim work.gpio_tb 
+# Loading sv_std.std
+# Loading work.gpio_tb
+# Loading work.apb_if
+# Loading work.gpio
+# Break in Module gpio_tb at ../gpio_tb.sv line 63
+# Simulation Breakpoint: Break in Module gpio_tb at ../gpio_tb.sv line 63
+# MACRO ./../modelsim.tcl PAUSED at line 21
+do ../modelsim.tcl
+# ** Warning: (vlib-34) Library already exists at "work".
+# 
+# ../../../rtl/interfaces/apb_if.sv
+# ../../../rtl/gpio/gpio.sv
+# ../gpio_tb.sv
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling interface apb_if
+# -- Compiling module gpio
+# -- Compiling module gpio_tb
+# 
+# Top level modules:
+# 	gpio_tb
+# vsim work.gpio_tb 
+# Loading sv_std.std
+# Loading work.gpio_tb
+# Loading work.apb_if
+# Loading work.gpio
+# Break in Module gpio_tb at ../gpio_tb.sv line 63
+# Simulation Breakpoint: Break in Module gpio_tb at ../gpio_tb.sv line 63
+# MACRO ./../modelsim.tcl PAUSED at line 21

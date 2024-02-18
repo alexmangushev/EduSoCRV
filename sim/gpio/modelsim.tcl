@@ -2,26 +2,20 @@
 vlib work
 
 # save list of files in variables
-set inc ../../include/*.sv
-set src ../../rtl/*.sv
-set tb  ../../testbench/*.sv
+set inc ../../../rtl/interfaces/apb_if.sv
+set src ../../../rtl/gpio/gpio.sv
+set tb  ../gpio_tb.sv
 
 # compile all the Verilog sources
-vlog $inc $src $tb
+vlog +acc $inc $src $tb
 
 # open the testbench module for simulation
-vsim work.rv_core_testbench
+vsim work.gpio_tb
 
-#add wave -color orange -hex -group tb /rv_core_testbench/*
-#add wave -hex -group top /rv_core_testbench/dut/core/*
-#add wave -hex -group fetch /rv_core_testbench/dut/core/i_fetch_stage/*
-#add wave -hex -group fetch /rv_core_testbench/dut/core/i_fetch_stage/i_fetch_unit/*
-#add wave -hex -group decode /rv_core_testbench/dut/core/i_decode_stage/*
-#add wave -hex -group decode /rv_core_testbench/dut/core/i_decode_stage/i_gpr/rf_reg
+add wave -hex *
 
-#add wave -recursive /rv_core_testbench/dut/core/*
-#add wave /rv_core_testbench/dut/core/*
-#add wave -recursive *
+# show apb signals
+add wave -hex /gpio_tb/apb/*
 
 # run the simulation
 run -all
