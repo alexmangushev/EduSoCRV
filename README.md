@@ -41,4 +41,4 @@
 | ------        | ----              | -------------                 |
 | 0x9300_0000   | GPIO_DIRECTION    | [RW] Configuration Register   |
 | 0x9300_0004   | GPIO_INPUT        | [R] GPIO Input Status         |
-| 0x9300_0004   | GPIO_OUTPUT       | [RW] GPIO Output Control      |
+| 0x9300_0008   | GPIO_OUTPUT       | [RW] GPIO Output Control      |
