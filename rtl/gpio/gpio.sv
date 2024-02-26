@@ -58,8 +58,8 @@ end
 always_comb
 case (apb_in.PADDR[2:0])
     CONFIG_ADDR:    apb_prdata = apb_registers[DATA_WIDTH - 1 : 0];
-    INPUT_ADDR:     apb_prdata = apb_registers[INPUT_ADDR * 8 +: DATA_WIDTH];
-    OUTPUT_ADDR:    apb_prdata = apb_registers[OUTPUT_ADDR * 8 +: DATA_WIDTH];
+    INPUT_ADDR:     apb_prdata = apb_registers[INPUT_ADDR << 3 +: DATA_WIDTH];
+    OUTPUT_ADDR:    apb_prdata = apb_registers[OUTPUT_ADDR << 3 +: DATA_WIDTH];
     default:        apb_prdata = '0;
 endcase
 
