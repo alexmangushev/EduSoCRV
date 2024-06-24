@@ -1,0 +1,6 @@
+.nvim/
+transcript
+sim/*/__pycache__/
+sim/*/sim_build/
+sim/*/sim/
+sim/*/transcript
