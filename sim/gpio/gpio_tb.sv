@@ -32,7 +32,7 @@ initial begin
     // set all output to 1
     apb.PSEL    <= '1;
     apb.PENABLE <= '0;
-    apb.PADDR   <= 'h9300_0000; //config register
+    apb.PADDR   <= 'h0000_0000; //config register
     apb.PWRITE  <= '1;
     apb.PWDATA  <= '1;
     @(posedge clk);
@@ -48,7 +48,7 @@ initial begin
     // set all output to 1
     apb.PSEL    <= '1;
     apb.PENABLE <= '0;
-    apb.PADDR   <= 'h9300_0008; //config register
+    apb.PADDR   <= 'h0000_0008; //config register
     apb.PWRITE  <= '1;
     apb.PWDATA  <= '1;
     @(posedge clk);
