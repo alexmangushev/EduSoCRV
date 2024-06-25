@@ -3,7 +3,7 @@ vlib work
 
 # save list of files in variables
 set inc ../../../rtl/interfaces/apb_if.sv
-set src ../../../rtl/gpio/gpio.sv
+set src ../../../rtl/gpio/*.sv
 set tb  ../gpio_tb.sv
 
 # compile all the Verilog sources
