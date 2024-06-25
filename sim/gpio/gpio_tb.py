@@ -10,6 +10,13 @@ from cocotb.clock import Clock
 
 CLK_PERIOD = 10
 START_CYCLEC_NUM = 3
+SYNC_DEPTH = 3
+MIN_BUS_VALUE = int(32 * '0', base=2)
+MAX_BUS_VALUE = int(32 * '1', base=2)
+RANGES_FOR_RANDOM = (
+    MIN_BUS_VALUE,
+    MAX_BUS_VALUE
+)
 
 
 class GPIORegAddreses(enum.Enum):
@@ -115,6 +122,40 @@ class APBMasterToSlaveWrapper:
         return data
 
 
+class GPIORegWrapper:
+
+    def __init__(self, apb_dut):
+        self._apb_dut = apb_dut
+        self.config = 0
+        self.write = 0
+        self.read = 0
+
+
+    async def __aenter__(self):
+        self.config = await self._apb_dut.run_read_transaction(
+            paddr=GPIORegAddreses.CONFIG_ADDR.value
+        )
+        self.read = await self._apb_dut.run_read_transaction(
+            paddr=GPIORegAddreses.INPUT_ADDR.value
+        )
+
+
+    async def __aexit__(self, exc_type, exc_value, traceback):
+        if exc_value:
+            raise exc_value
+
+        # maybe create csome cheks for property values
+
+        await self._apb_dut.run_write_transaction(
+            paddr=GPIORegAddreses.CONFIG_ADDR.value,
+            pwdata=self.config
+        )
+        await self._apb_dut.run_write_transaction(
+            paddr=GPIORegAddreses.OUTPUT_ADDR.value,
+            pwdata=self.write
+        )
+
+
 @cocotb.test()
 async def test_only_configurating_gpio(dut: cocotb.handle.HierarchyObject):
     '''
@@ -135,13 +176,9 @@ async def test_only_configurating_gpio(dut: cocotb.handle.HierarchyObject):
         dut, is_stretch_transactions=True
     )
 
-    ranges_for_random = (
-        int(32 * '0', base=2),
-        int(32 * '1', base=2)
-    )
     for _ in range(12):
         pins_config = random.randint(
-            *ranges_for_random
+            *RANGES_FOR_RANDOM
         )
 
         await my_gpio_apb.run_write_transaction(
@@ -179,7 +216,7 @@ async def test_gpio_output(dut):
         dut, is_stretch_transactions=True
     )
 
-    set_all_pins_to_output = int(32 * '1', base=2)
+    set_all_pins_to_output = MAX_BUS_VALUE
     await my_gpio_apb.run_write_transaction(
         paddr=GPIORegAddreses.CONFIG_ADDR.value,
         pwdata=set_all_pins_to_output
@@ -187,13 +224,9 @@ async def test_gpio_output(dut):
     assert dut.gpio_en.value == set_all_pins_to_output
     dut._log.info("Succes config GPIO an output1")
 
-    ranges_for_random = (
-        int(32 * '0', base=2),
-        int(32 * '1', base=2)
-    )
     for _ in range(12):
         set_to_output = random.randint(
-            *ranges_for_random
+            *RANGES_FOR_RANDOM
         )
         await my_gpio_apb.run_write_transaction(
             paddr=GPIORegAddreses.OUTPUT_ADDR.value,
@@ -222,7 +255,7 @@ async def test_gpio_input(dut):
         dut, is_stretch_transactions=True
     )
 
-    set_all_pins_to_input = int(32 * '0', base=2)
+    set_all_pins_to_input = MIN_BUS_VALUE
     await my_gpio_apb.run_write_transaction(
         paddr=GPIORegAddreses.CONFIG_ADDR.value,
         pwdata=set_all_pins_to_input
@@ -230,18 +263,13 @@ async def test_gpio_input(dut):
     assert dut.gpio_en.value == set_all_pins_to_input
     dut._log.info("Succes config GPIO to input")
 
-    ranges_for_random = (
-        int(32 * '0', base=2),
-        int(32 * '1', base=2)
-    )
-    sync_depth = 3
     for _ in range(12):
         set_to_input = random.randint(
-            *ranges_for_random
+            *RANGES_FOR_RANDOM
         )
         dut.gpio_in.value = set_to_input
         
-        for _ in range(sync_depth):     # test synchronaizer in GPIO
+        for _ in range(SYNC_DEPTH):     # test synchronaizer in GPIO
             await trigg.RisingEdge(clk)
 
         data = await my_gpio_apb.run_read_transaction(
@@ -253,8 +281,51 @@ async def test_gpio_input(dut):
     dut._log.info("PASS!!!")
 
 
-async def test_gpio_mixed():
-    '''TODO'''
+@cocotb.test()
+async def test_some_real_gpio(dut):
+    '''
+    test as if we had connected one LED and one button 
+    to different GPIO pins of the module in real conditions
+    TODO: add randomaised in values
+    '''
+    clk = dut.PCLK
+    rst_n = dut.PRESETn
+
+    rst_n.value = 0
+    init_clk(clk)
+    for _ in range(START_CYCLEC_NUM):
+        await trigg.RisingEdge(clk)
+    rst_n.value = 1
+    await trigg.RisingEdge(clk)
+
+    duti = GPIORegWrapper(
+        APBMasterToSlaveWrapper(
+            dut, is_stretch_transactions=True
+        )
+    )
+
+    async with duti:
+        duti.config = 0
+        duti.config |= ((1 << 2) | (1 << 8))
+        duti.config &= ~(1 << 4)
+
+        duti.write |= (1 << 8)
+
+    assert dut.gpio_en.value == duti.config
+    dut._log.info("Success config GPIO")
+
+    assert dut.gpio_out.value == duti.write
+    dut._log.info("Success writing to output")
+
+    dut.gpio_in.value == (1 << 4)
+    for _ in range(SYNC_DEPTH):
+        await trigg.RisingEdge(clk)
+
+    async with duti:
+        assert duti.read == dut.gpio_in.value
+    dut._log.info("Success read from GPIO")
+
+    dut._log.info("PASS!!!")
 
 
 if __name__ == '__main__':
