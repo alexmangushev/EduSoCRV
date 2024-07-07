@@ -52,3 +52,15 @@
 ## ROM controller
 Схема блока
 ![](./img/ROM_scheme.png)
+
+## RISC-V ядро
+### Общее описание
+Однотактное процессорное ядро на архитектуре RISC-V 
+Поддерживаемые команды: ADD, SUB, SLL, SRL, SRA, SLT, SLTU, XOR, OR, AND, ADDI, SLLI, SRLI, SRAI, SLTI, SLTIU, XORI, ORI, ANDI, LUI, BEQ, BNE, BLT, BGE, BLTU, BGEU 
+
+В текущей реализации ядро подключается к памяти через интерфейс AXI4-lite по каналам read data channel и read address channel, которые в top модуле `rtl\core\soc_riscv_core.sv` имеют названия `core_instr_...`. Каналы интерфейса тактируются на той же частоте, что и ядро
+
+### Симуляция
+Вы можете провести симуляцию ядра с использованием `ModelSim` и `cocotb`. Для этого требуется записать программу в файл `sim\core\try_it\program.txt` и запустить `sim\core\try_it\run_test.py`. 
+В ModelSim рекомендуется запустить скрипт `sim\core\try_it\soc_riscv_core_script.tcl`.
+Программа сперва запишется в память за несколько тактов, а лишь затем начнет выполняться
