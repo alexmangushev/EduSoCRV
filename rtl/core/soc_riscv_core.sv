@@ -155,7 +155,7 @@ module soc_riscv_core
 		new_pc_valid = 'b0;
 		if(rs1_use & rs2_use & is_branch) begin // opcode 99
 			if(comparator_op) begin
-				new_pc        	= comparator_out ? ex_out : cur_pc;
+				new_pc        	= comparator_out ? ex_out : cur_pc + 4;
 				new_pc_valid  	= 1'b1;
 			end else begin
 				new_pc        	= ex_out;
