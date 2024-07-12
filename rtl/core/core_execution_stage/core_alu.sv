@@ -4,7 +4,7 @@ module core_alu
 (
     input  logic [ALU_WIDTH_CODE-1: 0] alu_control,
 	 
-	 // values
+	// values
 	input  logic      [DATA_WIDTH-1:0] alu_in_a,
 	input  logic      [DATA_WIDTH-1:0] alu_in_b,
 	

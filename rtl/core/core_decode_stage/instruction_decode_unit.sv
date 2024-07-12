@@ -3,6 +3,7 @@ import alu_control_pkg::*;   //package with ALU control code
 import shift_control_pkg::*; //package with shift control code
 import imm_types_pkg::*;     //package with imm types code
 import comparator_control_pkg::*;
+import mem_control_pkg::*;
 module instruction_decode_unit
 (
     input logic  [   INSTR_WIDTH-1:0]  		 instr,         	 // instruction                 
@@ -16,7 +17,8 @@ module instruction_decode_unit
 	 output logic [ALU_WIDTH_CODE  -1:0]	 alu_control,   	 // Code for ALU
 	 output logic [SHIFT_WIDTH_CODE-1:0]	 shift_control, 	 // Code for shift
 	 output logic                       	 mdu_control,  		 // Code for MDU
-	 output logic [COMPARATOR_WIDTH_CODE-1:0]comparator_control, // Code for comparator
+	 output logic [COMPARATOR_WIDTH_CODE-1:0]comparator_control, // Code for comparator4
+	 output logic [MEM_WIDTH_CODE-1:0]		 mem_control,		 // Code for LSU
 	 output logic                       	 rs1_use,      		 // Instruction contain rs1
 	 output logic                      		 rs2_use,       	 // Instruction contain rs2
 	 output logic                      		 rd_use,       		 // Instruction contain rd
@@ -316,7 +318,7 @@ module instruction_decode_unit
 					is_branch  	 	= 0;
 					alu_control 	= alu_add;
 				end
-				7'b1100011:             //opcode 99
+				7'b1100011:			//opcode 99
 				begin
 					mem_op        = 0;
 					alu_op        = 1;
@@ -328,6 +330,7 @@ module instruction_decode_unit
 					rd_use        = 0;
 					imm_use       = 1;
 					imm_use_code  = imm_b_use;
+					imm_sign_ext  = 1;
 					is_branch     = 1;
 					case(funct3)
 						3'b000: comparator_control = comparator_beq;  // beg
@@ -336,6 +339,48 @@ module instruction_decode_unit
 						3'b101: comparator_control = comparator_bge;  // bge
 						3'b110: comparator_control = comparator_bltu; // bltu
 						3'b111: comparator_control = comparator_bgeu; // bgeu
+					endcase
+				end
+				7'b0000011:				//opcode 3
+				begin
+					mem_op        = 1;
+					alu_op        = 1;
+					alu_control   = alu_add;
+					shift_op      = 0;
+					comparator_op = 0;
+					rs1_use       = 1;
+					rs2_use       = 0;
+					rd_use        = 1;	
+					imm_use       = 1;
+					imm_use_code  = imm_i_use;
+					imm_sign_ext  = 1;
+					is_branch     = 0;
+					case(funct3)
+						3'b000: mem_control = mem_lb;  //lb 
+						3'b001: mem_control = mem_lh;  //lh
+						3'b010: mem_control = mem_lw;  //lw
+						3'b100: mem_control = mem_lbu; //lbu
+						3'b101: mem_control = mem_lhu; //lhu
+					endcase
+				end
+				7'b0100011:
+				begin	
+					mem_op        = 1;
+					alu_op        = 1;
+					alu_control   = alu_add;
+					shift_op      = 0;
+					comparator_op = 0;
+					rs1_use       = 1;
+					rs2_use       = 2;
+					rd_use        = 1;	
+					imm_use       = 1;
+					imm_use_code  = imm_s_use;
+					imm_sign_ext  = 1;
+					is_branch     = 0;
+					case(funct3)
+						3'b000: mem_control = mem_sb;  //sb 
+						3'b001: mem_control = mem_sh;  //sh
+						3'b010: mem_control = mem_sw;  //sw
 					endcase
 				end
 		endcase

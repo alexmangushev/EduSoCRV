@@ -10,7 +10,7 @@ module instruction_fetch_unit
 	input  logic                     ARREADY,      // AXI_lite ARREADY
 	input  logic                     ARVALID,	   // AXI_lite ARVALID
 	
-	output logic  [ADDR_WIDTH - 1: 0]instr_addr    // pc value
+	output logic  [ADDR_WIDTH - 1: 0]pc_value    	// pc value
 );
     logic [ADDR_WIDTH-1:0] pc; // pc register
 	 
@@ -22,7 +22,7 @@ module instruction_fetch_unit
 	 statetype state, nextstate;
 	 
 
-	always_comb // FSM
+	always_comb 	// FSM
 	begin
 	    nextstate = state;
 	    case(state)
@@ -35,7 +35,7 @@ module instruction_fetch_unit
 	
 	always_ff @(posedge clk) // FSM
 	begin
-	    case(state)
+	    case(nextstate)
 		    State_zero:      pc <= 32'b0;
 			State_wait:      pc <= pc;
 			State_free_pipe: pc <= is_branch ? new_pc : pc + 4; // branch_instruction or next_instruction
@@ -49,5 +49,5 @@ module instruction_fetch_unit
 		else if( clk) state <= nextstate;
 	end
 	
-	assign instr_addr = pc;
+	assign pc_value = pc;
 endmodule

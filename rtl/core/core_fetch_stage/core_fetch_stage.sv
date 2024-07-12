@@ -18,7 +18,8 @@ module core_fetch_stage
 	output logic  [ADDR_WIDTH-1:0]     ARADDR,
 	output logic                       ARVALID
 );
-	 
+	logic [31:0] pc_value;
+
 	instruction_fetch_unit IFU0(
 	.clk         (clk         ),
 	.rst         (rst         ),
@@ -26,11 +27,11 @@ module core_fetch_stage
 	.ARREADY     (ARREADY     ),
 	.ARVALID     (ARVALID     ),
 	.new_pc      (new_pc      ),
-	.instr_addr  (ARADDR      )
+	.pc_value	 (pc_value    )
 	);
 	
 	
-	always_ff @(posedge clk)
+	always_comb
 	begin
 		if(!fetch_stall) begin
 			ARVALID = 1'b1;
@@ -41,5 +42,6 @@ module core_fetch_stage
 		end
 	end
 	
-	assign instr = RVALID ? RDATA : 0;
+	assign ARADDR	 = pc_value >> 2;
+	assign instr 	 = RVALID ? RDATA : 0;
 endmodule

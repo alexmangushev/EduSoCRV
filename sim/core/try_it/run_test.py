@@ -18,8 +18,10 @@ if __name__ == "__main__":
                            proj_path / "rtl" / "core" / "packages" / "core_pkg.sv",
                            proj_path / "rtl" / "core" / "packages" / "comparator_control_pkg.sv",
                            proj_path / "rtl" / "core" / "packages" / "imm_types_pkg.sv",
+                           proj_path / "rtl" / "core" / "packages" / "mem_control_pkg.sv",
                            proj_path / "rtl" / "core" / "soc_riscv_core.sv",
-                           proj_path / "sim" / "core" / "try_it" / "main_ram_fetch.sv",
+                           proj_path / "sim" / "core" / "try_it" / "sv" / "main_ram_fetch.sv",
+                           proj_path / "sim" / "core" / "try_it" / "sv" / "main_ram_data.sv",
                            proj_path / "rtl" / "core" / "core_decode_stage" / "core_decode_stage.sv",
                            proj_path / "rtl" / "core" / "core_decode_stage" / "instruction_decode_unit.sv",
                            proj_path / "rtl" / "core" / "core_decode_stage" / "core_register_file.sv",
@@ -29,9 +31,10 @@ if __name__ == "__main__":
                            proj_path / "rtl" / "core" / "core_execution_stage" / "core_execution_stage.sv",
                            proj_path / "rtl" / "core" / "core_fetch_stage" / "core_fetch_stage.sv",
                            proj_path / "rtl" / "core" / "core_fetch_stage" / "instruction_fetch_unit.sv",
+                           proj_path / "rtl" / "core" / "core_memory_stage" / "load_store_unit.sv",
                            proj_path / "rtl" / "core" / "core_control_unit.sv",
                            proj_path / "rtl" / "core" / "core_memory_stage" / "load_store_unit.sv",
-                           proj_path / "sim" / "core" / "try_it" / "soc_riscv_core_test.sv"]
+                           proj_path / "sim" / "core" / "try_it" / "sv" / "soc_riscv_core_test.sv"]
 
     runner = get_runner(sim)
 
