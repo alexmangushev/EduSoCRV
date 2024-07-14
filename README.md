@@ -52,3 +52,24 @@
 ## ROM controller
 Схема блока
 ![](./img/ROM_scheme.png)
+
+## RISC-V ядро
+### Общее описание
+Однотактное процессорное ядро на архитектуре RISC-V.
+
+Поддерживаемые команды: ADD, SUB, SLL, SRL, SRA, SLT, SLTU, XOR, OR, AND, ADDI, SLLI, SRLI, SRAI, SLTI, SLTIU, XORI, ORI, ANDI, LUI, BEQ, BNE, BLT, BGE, BLTU, BGEU, LB, LBU, LH, LHU, LW, SB, SH, SW 
+
+Ядро подключается к памяти через интерфейс AXI4-lite по двум шинам: INSTR и DATA.
+INSTR шина использует каналы AXI, предназначенные для чтения, которые в top модуле `rtl\core\soc_riscv_core.sv` имеют названия `core_instr_...`. 
+DATA шина использует каналы AXI, предназначенные как для чтения так и для записи, которые в top модуле `rtl\core\soc_riscv_core.sv` имеют названия `core_data_...`.  
+Каналы интерфейса тактируются на той же частоте, что и ядро.
+
+### Симуляция
+Вы можете провести симуляцию ядра с использованием `ModelSim` и `cocotb`. 
+Для этого требуется записать программу на hex коде RISC-V в файл `sim\core\try_it\program.mem` и запустить `sim\core\try_it\run_test.py`. 
+При желании можно проинциализировать память с данными, записав значения в файл `sim\core\try_it\memory.mem`.
+В ModelSim рекомендуется запустить скрипт `sim\core\try_it\soc_riscv_core_script.tcl`.
+
+Программа запишет состояние системы, характерезующеся значениями архитектурных регистров и основной памятью с данными в файлы `sim\core\try_it\core_state`. 
+Файл `sim\core\try_it\core_state\memory_list.mem` содержит значения слов памяти.
+Файл `sim\core\try_it\core_state\gpr_list.mem` содержит значения архитектурных регистров.
