@@ -1,6 +1,0 @@
-<testsuites name="results">
-  <testsuite name="all" package="all">
-    <property name="random_seed" value="1720745319" />
-    <testcase name="system_test" classname="soc_riscv_core_test" file="C:\Users\revol\EduSoCRV\sim\core\try_it\soc_riscv_core_test.py" lineno="87" time="0.12578630447387695" sim_time_ns="1000.001" ratio_time="7949.999041490866" />
-  </testsuite>
-</testsuites>

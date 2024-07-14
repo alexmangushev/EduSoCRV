@@ -307,7 +307,7 @@ module instruction_decode_unit
 				endcase
 			end
 			7'b0110111:              // opcode 55
-				begin                    			// lui   
+				begin                // lui   
 					alu_op      	= 1;			  
 					imm_use     	= 1; 
 					imm_use_code	= imm_u_use;
@@ -341,6 +341,18 @@ module instruction_decode_unit
 						3'b111: comparator_control = comparator_bgeu; // bgeu
 					endcase
 				end
+				7'b0010111: 		// opcode 23
+				begin 				// auipc
+					alu_op      	= 1;			  
+					imm_use     	= 1; 
+					imm_use_code	= imm_u_use;
+					imm_sign_ext	= 1;
+					rs1_use     	= 0;
+					rs2_use     	= 0;
+					rd_use     	 	= 1;
+					is_branch  	 	= 0;
+					alu_control 	= alu_add;
+				end
 				7'b0000011:				//opcode 3
 				begin
 					mem_op        = 1;
@@ -363,7 +375,7 @@ module instruction_decode_unit
 						3'b101: mem_control = mem_lhu; //lhu
 					endcase
 				end
-				7'b0100011:
+				7'b0100011: 		// opcode 35
 				begin	
 					mem_op        = 1;
 					alu_op        = 1;
@@ -382,6 +394,41 @@ module instruction_decode_unit
 						3'b001: mem_control = mem_sh;  //sh
 						3'b010: mem_control = mem_sw;  //sw
 					endcase
+				end
+				7'b1100111: 		// opcode 103
+				begin				// jalr
+					case(funct3)
+						3'b000:
+							begin
+								mem_op        = 0;
+								alu_op        = 1;
+								alu_control   = alu_add;
+								shift_op      = 0;
+								comparator_op = 0;
+								rs1_use       = 1;
+								rs2_use       = 0;
+								rd_use        = 1;
+								imm_use       = 1;
+								imm_use_code  = imm_i_use;
+								imm_sign_ext  = 1;
+								is_branch     = 1;
+							end
+					endcase
+				end
+				7'b1101111: 		// opcode 111
+				begin				// jal
+					mem_op        = 0;
+					alu_op        = 1;
+					alu_control   = alu_add;
+					shift_op      = 0;
+					comparator_op = 0;
+					rs1_use       = 0;
+					rs2_use       = 0;
+					rd_use        = 1;
+					imm_use       = 1;
+					imm_use_code  = imm_j_use;
+					imm_sign_ext  = 1;
+					is_branch     = 1;
 				end
 		endcase
 	end

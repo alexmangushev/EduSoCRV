@@ -138,19 +138,23 @@ module soc_riscv_core
 	begin
 		ex_in_a = '0;
 		ex_in_b = '0;
-		if(rs1_use & rs2_use & !is_branch) begin 		// opcode 51
+		if(rs1_use & rs2_use & !is_branch) begin 		// opcode 51 (add, sub, sll, sra...)
 			ex_in_a 	= rs1_value;
 			ex_in_b 	= rs2_value;
 		end
-		else if(rs1_use & imm_use & !is_branch) begin 	// opcode 19, opcode 3
+		else if(rs1_use & imm_use & !is_branch) begin 	// opcode 19, opcode 3 (lb, lw, lh... and addi, srai, slti...)
 			ex_in_a 	= rs1_value;
 			ex_in_b 	= imm;
 		end
-		else if(!rs1_use & !rs2_use) begin 				// opcode 55
-			ex_in_a 	= 0;
+		else if(!rs2_use & imm_use & is_branch) begin	// opcode 103, opcode 111 (jal and jalr)
+			ex_in_a 	= rs1_use ? rs1_value : 0;
+			ex_in_b		= imm;
+		end
+		else if(!rs1_use & !rs2_use & !is_branch) begin // opcode 55, opcode 23 (lui, auipc)
+			ex_in_a 	= (fetched_instr[6:0] == 7'b0010111) ? cur_pc : 0; 	// if opcode 23 -> cur_pc (auipc), else 0 (lui)
 			ex_in_b 	= imm;
 		end
-		else if(rs1_use & rs2_use & is_branch) begin 	// opcode 99
+		else if(rs1_use & rs2_use & is_branch) begin 	// opcode 99 (beq, bne...)
 			ex_in_a 	= cur_pc;
 			ex_in_b 	= imm;
 		end
@@ -175,7 +179,7 @@ module soc_riscv_core
 		rf_we		= 'b0;
 		rf_data		= 'b0;
 		rf_addr		= 'b0;
-		if(rd_use) begin
+		if(rd_use & !is_branch) begin
 			if(mem_op) begin
 				if(mem_op_read) begin
 					rf_we	= mem_op_valid;
@@ -188,11 +192,16 @@ module soc_riscv_core
 					rf_addr	= 'b0;
 				end
 			end
-			else begin
+			else begin // usually case
 				rf_we	= 1;
 				rf_data	= ex_out;
 				rf_addr	= rd_addr;
 			end
+		end
+		else if(rd_use & is_branch) begin // opcode 103, opcode 111 (jal and jalr)
+			rf_we 	= 1;
+			rf_data = cur_pc + 4;
+			rf_addr = rd_addr;
 		end
 	end
 
@@ -201,13 +210,8 @@ module soc_riscv_core
 		new_pc_valid = 'b0;
 		if(rs1_use & rs2_use & is_branch) begin // opcode 99
 			if(comparator_op) begin
-<<<<<<< HEAD
 				new_pc			= comparator_out ? ex_out : cur_pc + 4;
 				new_pc_valid	= 1'b1;
-=======
-				new_pc        	= comparator_out ? ex_out : cur_pc + 4;
-				new_pc_valid  	= 1'b1;
->>>>>>> def872ae7fa41a15dc72c8a27bb32d4fcd9a7ce4
 			end else begin
 				new_pc			= ex_out;
 				new_pc_valid	= 1'b1;

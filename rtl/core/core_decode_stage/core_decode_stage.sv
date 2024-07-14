@@ -75,5 +75,5 @@ module core_decode_stage
 		.write_addr(rf_addr  ),
 		.we        (rf_we    )
 	);
-	 	 
+		 	 
 endmodule
