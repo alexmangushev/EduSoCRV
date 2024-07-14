@@ -35,7 +35,7 @@ module instruction_fetch_unit
 	
 	always_ff @(posedge clk) // FSM
 	begin
-	    case(nextstate)
+		case(state)
 		    State_zero:      pc <= 32'b0;
 			State_wait:      pc <= pc;
 			State_free_pipe: pc <= is_branch ? new_pc : pc + 4; // branch_instruction or next_instruction
